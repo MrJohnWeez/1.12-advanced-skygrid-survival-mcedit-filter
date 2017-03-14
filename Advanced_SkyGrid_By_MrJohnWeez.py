@@ -1,11 +1,17 @@
-# Advanced Custom Skygrid mcedit filter by MrJohnWeez
+# 1.12 Advanced Custom Skygrid mcedit filter by MrJohnWeez
+# YouTube, Github, Twitter: @MrJohnWeez
+
+#Feel free to use my filter but please give me credit @MrJohnWeez ~Thanks
 
 # I was able to gain knowlege from these great people:
-# Special thanks to Sethbling for custom distributions and biome modifications
-# Special thanks to StealthyExpert for 1.11 chest item modification
-# Special thanks to Zylion for some logic help
+# Special thanks to Sethbling for custom distributions help and biome modification code
+# Special thanks to StealthyExpert for 1.11 chest item modification guidance
+# Special thanks to Zylion for some logic help on mega blocks
 
-#Feel free to use my filter but please give me credit at MrJohnWeez ~Thanks
+#######################################################################################################################################
+
+
+#Imports all libraries needed:
 import math
 from numpy import zeros
 import random
@@ -15,9 +21,9 @@ from random import randint
 import datetime
 
 
+displayName = "Advanced SkyGrid (1.12+) By_MrJohnWeez"
 
-displayName = "Advanced SkyGrid (1.11+) By_MrJohnWeez"
-
+#McEdit imput language
 inputs = (
 	("Random blocks", True),
 	("Block (if not random)", "blocktype"),
@@ -106,6 +112,7 @@ inputs = (
 	("Game version", ("1.12+","1.11","Older")),
 	)
 	
+#Define all biomes with their minecraft value
 biomes = {
     "Ocean": 0,
     "Plains": 1,
@@ -173,6 +180,7 @@ biomes = {
     "(Uncalculated)": -1,
 }
 	
+#Function creates a chest with "Random" Items inside
 def createChestBlockData(x, y, z, options):
 	worldtype = options["World Type"]
 	total = 0
@@ -219,8 +227,8 @@ def createChestBlockData(x, y, z, options):
 	chest["z"] = TAG_Int(z)
 	items = TAG_List()
 	
+	#Generates a "random" item, for all 27 slots, to put into the chest
 	for c in xrange(0, 27):
-		#Generates a "random" item, for all 27 slots, to put into the chest
 		minecraftchest = TAG_Compound()
 		itemName,data,amount = pickItem(cump, total)
 		minecraftchest["id"] = TAG_String(itemName)
@@ -243,8 +251,8 @@ def statsForNerds(level, box, options):
 		dz = box.maxz-box.minz
 		total = dx*dy*dz
 		print "Selected Blocks: %d" % (total)
-		timeS = ((4000*math.exp(8*(10**-7)*total*2))/1000)*1.3
-		timeM = (4000*math.exp(8*(10**-7)*total*2))*1.3
+		timeS = (4000*math.exp(8*(10**-7)*total*2))/1000
+		timeM = 4000*math.exp(8*(10**-7)*total*2)
 		if total >= 4000000:
 			print "----!!!!---------WARNING---------!!!!----"
 			print "Too many blocks selected. Program may crash!"
@@ -264,10 +272,14 @@ def statsForNerds(level, box, options):
 def perform(level, box, options):
 	statsForNerds(level, box, options)
 	a = datetime.datetime.now()
-	#Runs main code then tells McEdit there were changes
+	
+	#Runs main code
 	biomeEditor(level, box, options)
 	blockPlacer(level, box, options)
+	
+	#tells McEdit there were changes
 	level.markDirtyBox(box)
+	
 	b = datetime.datetime.now()
 	delta = b - a
 	print "Time in milliseconds: %d" % (int(delta.total_seconds()* 1000))
@@ -480,6 +492,7 @@ def blockPlacer(level, box, options):
 				setBlock(level, (95,3), middlex+xunit, box.maxy-1, middlez+zunit)
 		
 	
+#Makes titleEnitity data for Spanwer/Chest
 def detectBlockId(level, options, pBlockId, x, y, z):
 	worldtype = options["World Type"]
 	chunk = level.getChunk(x/16, z/16)
@@ -489,7 +502,7 @@ def detectBlockId(level, options, pBlockId, x, y, z):
 		chunk.TileEntities.append( setSpawnerAt(level, options, worldtype, x, y, z))
 		
 		
-#Ready, set, spawn
+#Creates a "Random" Spanwer via world option
 def setSpawnerAt(level, options, worldtype, x, y, z):
 	worldtype = options["World Type"]
 	total = 0
@@ -534,12 +547,13 @@ def setSpawnerAt(level, options, worldtype, x, y, z):
 	
 	return spawner
 	
-
+	
+#Places block
 def setBlock(level, (block, data), x, y, z):
 	level.setBlockAt(x, y, z, block)
 	level.setBlockDataAt(x, y, z, data)
 	
-
+	
 # picks a "random" key/Item_block from a written distribution
 def pickblock(cump, size): 
 	r = random.random() * size
