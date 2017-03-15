@@ -245,44 +245,49 @@ def createChestBlockData(x, y, z, options):
 def statsForNerds(level, box, options):
 	Stats = options["Stats for nerds"]
 	print "Running...SkyGrid MCEdit Filter"
-	if Stats:
-		dx = box.maxx-box.minx
-		dy = box.maxy-box.miny
-		dz = box.maxz-box.minz
-		total = dx*dy*dz
-		print "Selected Blocks: %d" % (total)
-		timeS = (4000*math.exp(8*(10**-7)*total*2))/1000
-		timeM = 4000*math.exp(8*(10**-7)*total*2)
-		if total >= 4000000:
-			print "----!!!!---------WARNING---------!!!!----"
-			print "Too many blocks selected. Program may crash!"
-			print "Max estimated run time: 5 Minutes or more"
-		elif total >= 3000000:
-			print "------------------WARNING------------------"
-			print "Program is more efficient under 3 million blocks. Program may crash!"
-			print "Max estimated run time: 4 Minutes or more"
-		elif total >= 2000000:
-			print "------------------WARNING------------------"
-			print "Program is more efficient under 2 million blocks. Program may crash!"
-			print "Max estimated run time: 3 Minutes or more"
-		else:
-			print "Max estimated run time: %d Second(s) or %d Milliseconds" % (timeS,timeM)
-			
+	dx = box.maxx-box.minx
+	dy = box.maxy-box.miny
+	dz = box.maxz-box.minz
+	total = dx*dy*dz
+	print "Selected Blocks: %d" % (total)
+	if total >= 3000000 and options["Safe Mode"]:
+		return False
+	else:
+		if Stats:
+			timeS = (4000*math.exp(8*(10**-7)*total*2))/1000
+			timeM = 4000*math.exp(8*(10**-7)*total*2)
+			if total >= 4000000:
+				print "----!!!!---------WARNING---------!!!!----"
+				print "Too many blocks selected. Program may crash!"
+				print "Max estimated run time: 5 Minutes or more"
+			elif total >= 3000000:
+				print "------------------WARNING------------------"
+				print "Program is more efficient under 3 million blocks. Program may crash!"
+				print "Max estimated run time: 4 Minutes or more"
+			elif total >= 2000000:
+				print "------------------WARNING------------------"
+				print "Program is more efficient under 2 million blocks. Program may crash!"
+				print "Max estimated run time: 3 Minutes or more"
+			else:
+				print "Max estimated run time: %d Second(s) or %d Milliseconds" % (timeS,timeM)
+		return True
 	
 def perform(level, box, options):
-	statsForNerds(level, box, options)
+	isSafe = statsForNerds(level, box, options)
 	a = datetime.datetime.now()
-	
 	#Runs main code
-	biomeEditor(level, box, options)
-	blockPlacer(level, box, options)
-	
-	#tells McEdit there were changes
-	level.markDirtyBox(box)
-	
-	b = datetime.datetime.now()
-	delta = b - a
-	print "Time in milliseconds: %d" % (int(delta.total_seconds()* 1000))
+	if isSafe:
+		biomeEditor(level, box, options)
+		blockPlacer(level, box, options)
+		
+		#tells McEdit there were changes
+		level.markDirtyBox(box)
+		
+		b = datetime.datetime.now()
+		delta = b - a
+		print "Time in milliseconds: %d" % (int(delta.total_seconds()* 1000))
+	else:
+		print "Program has been terminated due to safe mode. Too many blocks were selected."
 	print "////////MCEdit Filter By MrJohnWeez////////"
 	
 	
