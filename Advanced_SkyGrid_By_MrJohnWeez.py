@@ -295,7 +295,7 @@ def biomeEditor(level, box, options):
 	worldtype = options["World Type"]
 	worldBiome = options["Set biome with world type"]
 	
-	if worldBiome == True:
+	if worldBiome:
 		if worldtype == "Overworld":
 			useBiome = "Forest"
 		elif worldtype == "Nether":
@@ -410,7 +410,7 @@ def blockPlacer(level, box, options):
 		total += value
 		
 	#only runs if user wants to clear all blocks before running main
-	if(fillAir == True):
+	if(fillAir):
 		for x in xrange(box.minx, box.maxx):
 			for y in xrange(box.miny, box.maxy):
 				for z in xrange(box.minz, box.maxz):
@@ -424,7 +424,7 @@ def blockPlacer(level, box, options):
 				#Sets "random" block to the lower x y z corner of a cube
 				if (((z - 1) % (sizescale + spaceH)) + 1 == 1) and (((y - 1) % (sizescale + spaceV)) + 1 == 1) and \
 				(((x - 1) % (sizescale + spaceH)) + 1 == 1):
-					if isRandom == True:
+					if isRandom:
 						blockid,dataid = pickblock(cump, total)
 						setBlock(level, (blockid,dataid), x, y, z)
 						detectBlockId(level, options, blockid, x, y, z)
@@ -433,7 +433,7 @@ def blockPlacer(level, box, options):
 				
 				# Make giant blocks from "Random" blocks in a cube shape
 				# Or makes a giant block based on the corner block
-				if oneblock == True:
+				if oneblock:
 					if level.blockAt(x, y, z-1) != 0 and (((z-1) % (sizescale+spaceH))+1 >= 2 and ((z-1) % (sizescale+spaceH))+1 <= sizescale):
 						pBlockId = level.blockAt(x, y, z-1)
 						pDataId = level.blockDataAt(x, y, z-1)
@@ -464,7 +464,7 @@ def blockPlacer(level, box, options):
 						detectBlockId(level, options, blockid, x, y, z)
 
 	#generating end portal
-	if portal == True:
+	if portal:
 		if (worldtype == "Overworld" or worldtype == "Normal"):
 			#Finds middles
 			dx = box.maxx - box.minx
@@ -487,7 +487,7 @@ def blockPlacer(level, box, options):
 					setBlock(level, (120,1), middlex+4, y, middlez+zunit)
 					
 	#Makes spawn platform in the middle of selection
-	if options["Create Spawn Platform"] == True:
+	if options["Create Spawn Platform"]:
 		dx = box.maxx - box.minx
 		dz = box.maxz - box.minz
 		middlex = box.minx + int(dx / 2)
@@ -1703,9 +1703,9 @@ def overworldp(options):
 		p[249,1] = 7   #glazed terracotta
 		p[250,1] = 7   #glazed terracotta
 		
-	if chests == True:
+	if chests:
 		p[54,3] = spawnchanceChest
-	if spawners == True:
+	if spawners:
 		p[52,0] = spawnchanceSpawner
 	return p
 	
@@ -1727,9 +1727,9 @@ def netherp(options):
 	p[215,0] = 2000 #Red Nether Brick
 	p[216,0] = 1000 #Bone Block
 	
-	if chests == True:
+	if chests:
 		p[54,3] = spawnchanceChest
-	if spawners == True:
+	if spawners:
 		p[52,0] = spawnchanceSpawner
 	return p
 	
@@ -1750,9 +1750,9 @@ def endp(options):
 	p[138,0] = 5	 #beacon
 	p[206,0] = 20000 #End stone bricks
 	
-	if chests == True:
+	if chests:
 		p[54,3] = spawnchanceChest #Chest
-	if spawners == True:
+	if spawners:
 		p[52,0] = spawnchanceSpawner #spawner
 	return p
 	
@@ -1849,9 +1849,9 @@ def normalp(options):
 		p[249,1] = 7   #glazed terracotta
 		p[250,1] = 7   #glazed terracotta	
 
-	if chests == True:
+	if chests:
 		p[54,3] = spawnchanceChest #Chest
-	if spawners == True:
+	if spawners:
 		p[52,0] = spawnchanceSpawner #spawner
 	return p
 	
@@ -1874,9 +1874,9 @@ def icep(options):
 	p[129,0] = 100   #Emerald ore
 	p[174,0] = 29000 #Packed Ice
 	
-	if chests == True:
+	if chests:
 		p[54,3] = spawnchanceChest #Chest
-	if spawners == True:
+	if spawners:
 		p[52,0] = spawnchanceSpawner #spawner
 	return p
 	
@@ -1927,9 +1927,9 @@ def junglep(options):
 		p[249,1] = 30  #glazed terracotta
 		p[250,1] = 30  #glazed terracotta	
 	
-	if chests == True:
+	if chests:
 		p[54,3] = spawnchanceChest #Chest
-	if spawners == True:
+	if spawners:
 		p[52,0] = spawnchanceSpawner #spawner
 	return p
 
@@ -1960,9 +1960,9 @@ def swampp(options):
 	p[208,0] = 1500 #Grass path
 	
 	
-	if chests == True:
+	if chests:
 		p[54,3] = spawnchanceChest #Chest
-	if spawners == True:
+	if spawners:
 		p[52,0] = spawnchanceSpawner #spawner
 	return p
 
@@ -1991,9 +1991,9 @@ def desertp(options):
 	p[208,0] = 1500  #Grass path
 	
 	
-	if chests == True:
+	if chests:
 		p[54,3] = spawnchanceChest #Chest
-	if spawners == True:
+	if spawners:
 		p[52,0] = spawnchanceSpawner #spawner
 	return p
 
@@ -2020,9 +2020,9 @@ def oceanp(options):
 	p[168,2] = 2500   #Dark Prismarine
 	p[169,0] = 500    #Sea Lantern
 
-	if chests == True:
+	if chests:
 		p[54,3] = spawnchanceChest #Chest
-	if spawners == True:
+	if spawners:
 		p[52,0] = spawnchanceSpawner #spawner
 	return p
 
@@ -2043,9 +2043,9 @@ def mushroomp(options):
 	p[100,14] = 12600 #Red mushroom
 	p[110,0] = 42000  #Mycelium
 	
-	if chests == True:
+	if chests:
 		p[54,3] = spawnchanceChest #Chest
-	if spawners == True:
+	if spawners:
 		p[52,0] = spawnchanceSpawner #spawner
 	return p
 
@@ -2129,9 +2129,9 @@ def mesap(options):
 		p[249,1] = 100   #glazed terracotta
 		p[250,1] = 100   #glazed terracotta		
 	
-	if chests == True:
+	if chests:
 		p[54,3] = spawnchanceChest #Chest
-	if spawners == True:
+	if spawners:
 		p[52,0] = spawnchanceSpawner #spawner
 	return p
 
@@ -2440,8 +2440,8 @@ def overloadedp(options):
 		p[249,1] = 398   #glazed terracotta
 		p[250,1] = 398   #glazed terracotta	
 	
-	if chests == True:
+	if chests:
 		p[54,3] = spawnchanceChest #Chest
-	if spawners == True:
+	if spawners:
 		p[52,0] = spawnchanceSpawner #spawner
 	return p
